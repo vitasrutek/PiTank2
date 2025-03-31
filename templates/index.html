@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RC PiTank</title>
+    <script src="/static/socket.io.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #333;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        #camera-stream {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #555;
+            margin-bottom: 20px;
+        }
+
+        #controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+        }
+
+        button {
+            width: 80px;
+            height: 80px;
+            margin: 5px;
+            font-size: 16px;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #777;
+        }
+
+        #status {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>RC Tank Ovládání</h2>
+        <img id="camera-stream" alt="Načítání..." />
+
+    <div id="controls">
+        <div class="group">
+        <div class="group">
+            <div class="row">
+                <label>Výkon:</label>
+                <input type="range" id="speedSlider" min="0" max="100" value="100" oninput="updateSpeed(this.value)">
+                <span id="speedValue">100%</span>
+            </div>
+        </div>
+                        <div class="row">
+                <button ontouchstart="sendCommand('forward')" ontouchend="sendCommand('stop')">Forward</button>
+            </div>
+            <div class="row">
+                <button ontouchstart="sendCommand('left')" ontouchend="sendCommand('stop')">Left</button>
+                <button ontouchstart="sendCommand('stop')" ontouchend="sendCommand('stop')">Stop</button>
+                <button ontouchstart="sendCommand('right')" ontouchend="sendCommand('stop')">Right</button>
+            </div>
+            <div class="row">
+                <button ontouchstart="sendCommand('backward')" ontouchend="sendCommand('stop')">Backward</button>
+            </div>
+        </div>
+
+    </div>
+
+    <p id="status">Stav: ...</p>
+
+    <script>
+        var socket = io();
+
+        function sendCommand(command) {
+            socket.emit('motor_command', { command: command });
+        }
+
+        function updateSpeed(speed) {
+            document.getElementById("speedValue").innerText = speed + "%";
+            socket.emit('speed_change', { speed: parseInt(speed) });
+        }
+
+        socket.on('response', function(data) {
+            document.getElementById('status').innerText = data.status;
+        });
+
+        // Dynamické načtení streamu z kamery
+        var cameraStream = document.getElementById("camera-stream");
+                cameraStream.src = "http://" + window.location.hostname + ":8000/stream.mjpg";
+    </script>
+</body>
+</html>
