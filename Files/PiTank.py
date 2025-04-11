@@ -9,13 +9,10 @@ eventlet.monkey_patch()
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-#socketio = SocketIO(app, async_mode='threading')
-#socketio = SocketIO(app, async_mode='eventlet')
 
-# GPIO nastavení (upraveno - STBY pryč, AIN2 na pin 27)
 MOTOR_PINS = {
     "AIN1": 22,
-    "AIN2": 17,  # přehodíme z pinu 17, ten byl zároveň STBY
+    "AIN2": 17,
     "BIN1": 24,
     "BIN2": 23
 }
@@ -46,7 +43,6 @@ pwmA.start(0)
 pwmB.start(0)
 
 def gradual_start(pwm, target_speed, step=5, delay=0.02):
-    """ Postupné zrychlování motoru na požadovanou rychlost """
     for dc in range(0, target_speed + 1, step):
         pwm.ChangeDutyCycle(dc)
         time.sleep(delay)
