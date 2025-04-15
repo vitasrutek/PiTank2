@@ -20,3 +20,11 @@ pip3 install evdev
 ```
 
 ![zapojeni](https://github.com/vitasrutek/PiTank2/blob/main/Zapojeni.png)
+
+<table>
+  <tr>
+    <th><img src="https://github.com/vitasrutek/PiTank2/blob/main/PiTank1.png" width="250"></th>
+    <th><img src="https://github.com/vitasrutek/PiTank2/blob/main/PiTank2.png" width="250"></th>
+  </tr>
+
+</table>
