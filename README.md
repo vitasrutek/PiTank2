@@ -39,7 +39,11 @@ Then:
 ```
 sudo rfkill unblock bluetooth
 ```
-
+For autochecking Bluetooth controller connection:
+```
+sudo apt install python3-dbus python3-gi
+```
+and then edit MAC address of BT controller in BTcheck.py and set it run as a service.
 
 ### Parts
 - Raspberry Pi Zero2 W (with "spy" camera module)
