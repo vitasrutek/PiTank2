@@ -9,15 +9,38 @@ Front camera is simple PiCamera2 mjpeg server.
 Engines has smooth start forward and turns with speed control (slider in HTML).  
 dependencies:  
 ```
-sudo apt install python3-flask python3-eventlet python3-gpiozero python3-socketio python3
+sudo apt install python3-flask python3-eventlet python3-gpiozero python3-socketio python3-pip
 ```
 
 Or run second Python3 file for RC via bluetooth gamepad like DS4 (controller has to be paired and connected via bluetoothctl (or etc.)).  
 dependencies:  
 ```
 sudo apt install evtest   # run for find correct evdev ID
-pip3 install evdev
+sudo apt install python3-evdev
 ```
+
+
+Next round is for Bluetooth activation (on Trixie is softblocked by defautl):
+Check BT status
+```
+rfkill list
+```
+
+If Bluetooth Soft blocked: yes - like this:
+```
+0: phy0: Wireless LAN
+    Soft blocked: no
+    Hard blocked: no
+1: hci0: Bluetooth
+    Soft blocked: yes
+    Hard blocked: no
+```
+Then:
+```
+sudo rfkill unblock bluetooth
+```
+
+
 ### Parts
 - Raspberry Pi Zero2 W (with "spy" camera module)
 - USB powerbank (single 3,7V cell)
